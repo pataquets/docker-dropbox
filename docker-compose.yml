@@ -1,0 +1,18 @@
+version: "2.4"
+services:
+  dropbox:
+    container_name: dropbox
+    hostname: ${HOSTNAME:-dropbox}
+    restart: always
+    image: pataquets/dropbox
+    # build: .
+    environment:
+      - DBOX_UID
+      - DBOX_GID
+    volumes:
+      - type: bind
+        source: ${HOME}/Dropbox/
+        target: /dbox/Dropbox/
+      - type: bind
+        source: ${HOME}/.dropbox/
+        target: /dbox/.dropbox/
