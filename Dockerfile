@@ -1,26 +1,33 @@
-FROM debian:jessie
+FROM debian:stretch
 ENV DEBIAN_FRONTEND noninteractive
 
 # Following 'How do I add or remove Dropbox from my Linux repository?' - https://www.dropbox.com/en/help/246
 RUN \
-    echo 'deb http://linux.dropbox.com/debian jessie main' | \
+    . /etc/os-release && \
+    echo "deb http://linux.dropbox.com/debian ${VERSION_CODENAME} main" | \
       tee /etc/apt/sources.list.d/dropbox.list \
-    && \
-    apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys \
-      1C61A2656FB57B7E4DE0F4C1FC918B335044912E \
     && apt-get update \
     # Note 'ca-certificates' dependency is required for 'dropbox start -i' to succeed
     && \
-    apt-get -y install ca-certificates curl python-gpgme dropbox libglapi-mesa \
+    apt-get -y install ca-certificates curl python-gpgme gpg libglapi-mesa \
       libxcb-glx0 libxcb-dri2-0 libxcb-dri3-0 libxcb-present0 libxcb-sync1 \
       libxshmfence1 libxxf86vm1 \
+    && apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys \
+      1C61A2656FB57B7E4DE0F4C1FC918B335044912E \
     # Perform image clean up.
+    && apt-get purge --autoremove gpg \
     && apt-get -y autoclean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     # Create service account and set permissions.
     && groupadd dropbox \
     && useradd -m -d /dbox -c "Dropbox Daemon Account" \
                -s /usr/sbin/nologin -g dropbox dropbox
+
+RUN \
+  apt-get update && \
+  apt-get -y install dropbox && \
+  apt-get -y autoclean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Dropbox is weird: it insists on downloading its binaries itself via 'dropbox
 # start -i'. So we switch to 'dropbox' user temporarily and let it do its thing.
