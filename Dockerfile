@@ -16,7 +16,7 @@ RUN \
     && echo "deb http://linux.dropbox.com/debian ${VERSION_CODENAME} main" \
       | tee /etc/apt/sources.list.d/dropbox.list \
     # Perform image clean up.
-    && apt-get purge --autoremove gpg \
+    && apt-get purge -y --autoremove gpg \
     && apt-get -y clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     # Create service account and set permissions.
