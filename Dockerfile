@@ -14,11 +14,7 @@ RUN \
   # Perform image clean up.
   && apt-get purge -y gnupg --autoremove \
   && apt-get -y clean \
-  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-  # Create service account and set permissions.
-  && groupadd dropbox \
-  && useradd -m -d /dbox -c "Dropbox Daemon Account" \
-             -s /usr/sbin/nologin -g dropbox dropbox
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN \
   apt-get update && \
@@ -29,6 +25,12 @@ RUN \
   apt-get -y install dropbox && \
   apt-get -y clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Create service account and set permissions.
+RUN \
+  groupadd dropbox \
+  && useradd -m -d /dbox -c "Dropbox Daemon Account" \
+             -s /usr/sbin/nologin -g dropbox dropbox
 
 # Dropbox is weird: it insists on downloading its binaries itself via 'dropbox
 # start -i'. So we switch to 'dropbox' user temporarily and let it do its thing.
