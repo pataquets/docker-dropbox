@@ -4,21 +4,21 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Following 'How do I add or remove Dropbox from my Linux repository?' - https://www.dropbox.com/en/help/246
 RUN \
-    apt-get update \
-    && apt-get -y install ca-certificates gnupg \
-    && apt-key adv --keyserver hkps://keyserver.ubuntu.com --recv-keys \
-      1C61A2656FB57B7E4DE0F4C1FC918B335044912E \
-    && . /etc/os-release \
-    && echo "deb http://linux.dropbox.com/debian ${VERSION_CODENAME} main" \
-      | tee /etc/apt/sources.list.d/dropbox.list \
-    # Perform image clean up.
-    && apt-get purge -y gnupg --autoremove \
-    && apt-get -y clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    # Create service account and set permissions.
-    && groupadd dropbox \
-    && useradd -m -d /dbox -c "Dropbox Daemon Account" \
-               -s /usr/sbin/nologin -g dropbox dropbox
+  apt-get update \
+  && apt-get -y install ca-certificates gnupg \
+  && apt-key adv --keyserver hkps://keyserver.ubuntu.com --recv-keys \
+    1C61A2656FB57B7E4DE0F4C1FC918B335044912E \
+  && . /etc/os-release \
+  && echo "deb http://linux.dropbox.com/debian ${VERSION_CODENAME} main" \
+    | tee /etc/apt/sources.list.d/dropbox.list \
+  # Perform image clean up.
+  && apt-get purge -y gnupg --autoremove \
+  && apt-get -y clean \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+  # Create service account and set permissions.
+  && groupadd dropbox \
+  && useradd -m -d /dbox -c "Dropbox Daemon Account" \
+             -s /usr/sbin/nologin -g dropbox dropbox
 
 RUN \
   apt-get update && \
