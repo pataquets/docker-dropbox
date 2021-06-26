@@ -5,11 +5,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Following 'How do I add or remove Dropbox from my Linux repository?' - https://www.dropbox.com/en/help/246
 RUN \
     apt-get update \
-    # Note 'ca-certificates' dependency is required for 'dropbox start -i' to succeed
-    && \
-    apt-get -y install ca-certificates curl python-gpgme gpg libglapi-mesa \
-      libxcb-glx0 libxcb-dri2-0 libxcb-dri3-0 libxcb-present0 libxcb-sync1 \
-      libxshmfence1 libxxf86vm1 \
+    && apt-get -y install ca-certificates gpg \
     && apt-key adv --keyserver hkps://keyserver.ubuntu.com --recv-keys \
       1C61A2656FB57B7E4DE0F4C1FC918B335044912E \
     && . /etc/os-release \
@@ -26,6 +22,11 @@ RUN \
 
 RUN \
   apt-get update && \
+  # Note 'ca-certificates' dependency is required for 'dropbox start -i' to succeed
+  apt-get -y install ca-certificates curl python-gpgme libglapi-mesa \
+    libxcb-glx0 libxcb-dri2-0 libxcb-dri3-0 libxcb-present0 libxcb-sync1 \
+    libxshmfence1 libxxf86vm1 \
+  && \
   apt-get -y install dropbox && \
   apt-get -y clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
