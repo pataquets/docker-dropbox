@@ -17,7 +17,7 @@ RUN \
       | tee /etc/apt/sources.list.d/dropbox.list \
     # Perform image clean up.
     && apt-get purge --autoremove gpg \
-    && apt-get -y autoclean \
+    && apt-get -y clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     # Create service account and set permissions.
     && groupadd dropbox \
@@ -27,7 +27,7 @@ RUN \
 RUN \
   apt-get update && \
   apt-get -y install dropbox && \
-  apt-get -y autoclean && \
+  apt-get -y clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Dropbox is weird: it insists on downloading its binaries itself via 'dropbox
