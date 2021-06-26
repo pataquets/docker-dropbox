@@ -4,10 +4,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Following 'How do I add or remove Dropbox from my Linux repository?' - https://www.dropbox.com/en/help/246
 RUN \
-    . /etc/os-release && \
-    echo "deb http://linux.dropbox.com/debian ${VERSION_CODENAME} main" | \
-      tee /etc/apt/sources.list.d/dropbox.list \
-    && apt-get update \
+    apt-get update \
     # Note 'ca-certificates' dependency is required for 'dropbox start -i' to succeed
     && \
     apt-get -y install ca-certificates curl python-gpgme gpg libglapi-mesa \
@@ -15,6 +12,9 @@ RUN \
       libxshmfence1 libxxf86vm1 \
     && apt-key adv --keyserver hkps://keyserver.ubuntu.com --recv-keys \
       1C61A2656FB57B7E4DE0F4C1FC918B335044912E \
+    && . /etc/os-release \
+    && echo "deb http://linux.dropbox.com/debian ${VERSION_CODENAME} main" \
+      | tee /etc/apt/sources.list.d/dropbox.list \
     # Perform image clean up.
     && apt-get purge --autoremove gpg \
     && apt-get -y autoclean \
