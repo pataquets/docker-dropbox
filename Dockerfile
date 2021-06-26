@@ -22,10 +22,9 @@ RUN \
 
 RUN \
   apt-get update && \
-  # Note 'ca-certificates' dependency is required for 'dropbox start -i' to succeed
-  apt-get -y install ca-certificates curl python-gpgme libglapi-mesa \
-    libxcb-glx0 libxcb-dri2-0 libxcb-dri3-0 libxcb-present0 libxcb-sync1 \
-    libxshmfence1 libxxf86vm1 \
+  # Install needed packages not depended on by 'dropbox' package.
+  apt-get -y install ca-certificates curl python-gpgme \
+    libglapi-mesa libxcb-glx0 libxxf86vm1 \
   && \
   apt-get -y install dropbox && \
   apt-get -y clean && \
